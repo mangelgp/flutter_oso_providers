@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Material App',
+      title: 'API REST',
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
@@ -23,6 +23,10 @@ class MyApp extends StatelessWidget {
         'find_user'   : (BuildContext context) => FindUser(),
         'update_user' : (BuildContext context) => UpdateUserPage(),
       },
+      darkTheme: ThemeData(
+        brightness: Brightness.dark
+      ),
+      themeMode: ThemeMode.system,
     );
   }
 }

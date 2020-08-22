@@ -1,4 +1,3 @@
-
 class Users {
   List<User> items = new List();
 
@@ -35,17 +34,6 @@ class User {
   String createdAt;
   String updatedAt;
 
-  // factory User.fromJson(Map<String, dynamic> json) => User(
-  //   idUser            : json['id'],
-  //   name              : json['name'],
-  //   email             : json['email'],
-  //   emailVerifiedAt   : json['email_verified_at'],
-  //   verified          : json['verified'],
-  //   admin             : json['admin'],
-  //   createdAt         : json['created_at'],
-  //   updatedAt         : json['updated_at'],
-  // );
-
   User.fromJson(Map<String, dynamic> json) {
     idUser            = json['id'];
     name              = json['name'];
@@ -56,10 +44,4 @@ class User {
     createdAt         = json['created_at'];
     updatedAt         = json['updated_at'];
   }
-
-  // Map<String, String> toJson() => {
-  //   "name"      : 
-  //   "email"     :
-  //   "password"  :
-  // };
 }

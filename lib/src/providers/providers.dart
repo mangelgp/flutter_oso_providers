@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'package:providers_oso/src/models/error_user.dart';
 import 'package:providers_oso/src/models/user.dart';
 
 class ComunicationService {
@@ -28,24 +29,36 @@ class ComunicationService {
     return null;
   }
 
-  Future<User> addNewUser({String nombre, String correo, String clave}) async {
-    try {
-      final url = Uri.http(authority, 'api/users',{
-        'name'                  : nombre,
-        'email'                 : correo,
-        'password'              : clave,
-        'password_confirmation' : clave
-      });
+  Future<dynamic> addNewUser({String nombre, String correo, String clave, String claveConfirmation}) async {
 
-      final resp = await http.post(url);
-      final decodedData = json.decode(resp.body);
+    final url = Uri.http(authority, 'api/users',{
+      'name'                  : nombre,
+      'email'                 : correo,
+      'password'              : clave,
+      'password_confirmation' : claveConfirmation
+    });
+
+    final resp = await http.post(url);
+    final decodedData = json.decode(resp.body);
+    
+    try {
+
       final user = new User.fromJson(decodedData['data']);
       print(decodedData['data']);
       return user;
-    } catch (err) {
-      print('error: ${err.toString()}');
+
+    } catch (_) {
+
+      try {
+        final error = ErrorUser.fromJson(decodedData['error']);
+        print(decodedData['error']);
+        return error;
+      } catch (error) {
+        print(error.toString());
+        return null;
+      }
+
     }
-    return null;
   }
 
   Future<User> updateUser({String id, String name, String email}) async {
