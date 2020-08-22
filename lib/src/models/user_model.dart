@@ -1,4 +1,13 @@
 class User {
+  int id;
+  String name;
+  String email;
+  String emailVerifiedAt;
+  String verified;
+  String admin;
+  String createdAt;
+  String updatedAt;
+
   User({
     this.id,
     this.name,
@@ -9,15 +18,6 @@ class User {
     this.createdAt,
     this.updatedAt,
   });
-
-  int id;
-  String name;
-  String email;
-  String emailVerifiedAt;
-  String verified;
-  String admin;
-  String createdAt;
-  String updatedAt;
 
   User.fromJson(Map<String, dynamic> json) {
     id                = json['id'];
