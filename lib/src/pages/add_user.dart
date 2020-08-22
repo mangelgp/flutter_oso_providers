@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:providers_oso/src/models/error_user.dart';
-import 'package:providers_oso/src/models/user.dart';
-import 'package:providers_oso/src/providers/providers.dart';
+import 'package:providers_oso/src/models/error_user_model.dart';
+import 'package:providers_oso/src/models/user_model.dart';
+import 'package:providers_oso/src/providers/users_providers.dart';
 
 class NewUserPage extends StatefulWidget {
   @override
@@ -10,7 +10,7 @@ class NewUserPage extends StatefulWidget {
 
 class _NewUserPageState extends State<NewUserPage> {
 
-  final comunicationService= new ComunicationService();
+  final usersProviders = new UsersProviders();
 
   TextEditingController _controllerName = TextEditingController();
   TextEditingController _controllerEmail = TextEditingController();
@@ -21,7 +21,6 @@ class _NewUserPageState extends State<NewUserPage> {
   String _email                = '';
   String _password             = '';
   String _passwordConfirmation = '';
-  String _alert                = '';
 
   @override
   Widget build(BuildContext context) {
@@ -119,11 +118,7 @@ class _NewUserPageState extends State<NewUserPage> {
                   },
                 ),
 
-                SizedBox(height: 20.0,),
-
-                Center(child: Text(_alert, style: TextStyle(color: Colors.red),)),
-
-                SizedBox(height: 20.0,),
+                SizedBox(height: 40.0,),
 
                 RaisedButton(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
@@ -143,7 +138,7 @@ class _NewUserPageState extends State<NewUserPage> {
 
   void _addNewUser(BuildContext context) async {
 
-    var response = await comunicationService.addNewUser(
+    var response = await usersProviders.addNewUser(
       nombre           : _name,
       correo           : _email,
       clave            : _password,
@@ -167,7 +162,7 @@ class _NewUserPageState extends State<NewUserPage> {
               style: TextStyle(color: Colors.black,),
               children: [
                 TextSpan(text: "Usuario creado exitosamente!\n"),
-                TextSpan(text: 'ID de Usuario: ${response.idUser}', style: TextStyle(fontWeight: FontWeight.w500)),
+                TextSpan(text: 'ID de Usuario: ${response.id}', style: TextStyle(fontWeight: FontWeight.w500)),
               ]
             ),
             textAlign: TextAlign.center,

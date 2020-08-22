@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:providers_oso/src/bloc/user_bloc.dart';
-import 'package:providers_oso/src/models/user.dart';
-import 'package:providers_oso/src/providers/providers.dart';
+import 'package:providers_oso/src/models/user_model.dart';
+import 'package:providers_oso/src/providers/users_providers.dart';
+
 
 class UpdateUserPage extends StatefulWidget {
   @override
@@ -10,8 +10,7 @@ class UpdateUserPage extends StatefulWidget {
 
 class _UpdateUserPageState extends State<UpdateUserPage> {
 
-  final comService = ComunicationService();
-  final usersBloc = UsersBloc();
+  final comService = UsersProviders();
 
   String _name = '';
   String _email = '';
@@ -20,8 +19,6 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
   Widget build(BuildContext context) {
 
     final User user = ModalRoute.of(context).settings.arguments;
-    // _name = user.name;
-    // _email = user.email;
 
     return Scaffold(
       appBar: AppBar(
@@ -35,7 +32,6 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
           children: [
             TextFormField(
               initialValue: user.name,
-              // controller: _controllerName,
               autofocus: true,
               keyboardType: TextInputType.name,
               textCapitalization: TextCapitalization.words,
@@ -48,10 +44,8 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
               ),
               onChanged: (valor) {
                 setState(() {
-                  // _alert = '';
                   _name = valor;
                   print(_name);
-                  // watcher();
                 });
               },
             ),
@@ -60,7 +54,6 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
 
             TextFormField(
               initialValue: user.email,
-              // controller: _controllerEmail,
               keyboardType: TextInputType.emailAddress,
               textCapitalization: TextCapitalization.none,
               decoration: InputDecoration(
@@ -72,10 +65,8 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
               ),
               onChanged: (valor) {
                 setState(() {
-                  // _alert = '';
                   _email = valor;
                   print(_email);
-                  // watcher();
                 });
               },
             ),
@@ -87,17 +78,10 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
               color: Colors.blue,
               onPressed: () async{
-                // if (_ready) {
-                //   var updateUser = await comService.updateUser(user: user);
-                //   print(updateUser.name);
-                //   Navigator.pop(context);
-                // }
-                // else _showAlert();
-
                 var updateUser = await comService.updateUser(
                   email: _email,
                   name: _name,
-                  id: user.idUser.toString()
+                  id: user.id.toString()
                 );
                 print(updateUser);
                 Navigator.pop(context, true);
@@ -108,20 +92,4 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
       ),
     );
   }
-
-  // void _showAlert() {
-  //   setState(() {
-  //     _alert = '*Porfavor llene todos los campos*';
-  //   });
-  // }
-
-  // void watcher(){
-  //   if (_name != '' && _email != '') {
-  //     setState(() {
-  //       _ready = true;
-  //     });
-  //   } else {
-  //     _ready = false;
-  //   }
-  // }
 }

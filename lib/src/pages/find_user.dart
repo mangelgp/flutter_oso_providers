@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:providers_oso/src/models/user.dart';
-import 'package:providers_oso/src/providers/providers.dart';
+import 'package:providers_oso/src/models/user_model.dart';
+import 'package:providers_oso/src/providers/users_providers.dart';
 
 class FindUser extends StatefulWidget {
   @override
@@ -9,7 +9,7 @@ class FindUser extends StatefulWidget {
 
 class _FindUserState extends State<FindUser> {
 
-  final comService = ComunicationService();
+  final usersProviders = UsersProviders();
 
   TextEditingController _controller = TextEditingController();
   String _idUser = '';
@@ -49,9 +49,8 @@ class _FindUserState extends State<FindUser> {
 
             SizedBox(height: 30.0,),
 
-
             FutureBuilder(
-              future: comService.getUserById(_idUser),
+              future: usersProviders.getUserById(_idUser),
               builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
                 if (snapshot.hasData) {
                   return _createUserInfo(snapshot.data);

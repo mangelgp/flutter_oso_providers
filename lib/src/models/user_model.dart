@@ -1,21 +1,6 @@
-class Users {
-  List<User> items = new List();
-
-  Users();
-
-  Users.fromJsonList(List<dynamic> jsonList) {
-    if (jsonList == null) return;
-
-    for (var item in jsonList) {
-      final user = new User.fromJson(item);
-      items.add(user);     
-    }
-  }
-}
-
 class User {
   User({
-    this.idUser,
+    this.id,
     this.name,
     this.email,
     this.emailVerifiedAt,
@@ -25,7 +10,7 @@ class User {
     this.updatedAt,
   });
 
-  int idUser;
+  int id;
   String name;
   String email;
   String emailVerifiedAt;
@@ -35,7 +20,7 @@ class User {
   String updatedAt;
 
   User.fromJson(Map<String, dynamic> json) {
-    idUser            = json['id'];
+    id                = json['id'];
     name              = json['name'];
     email             = json['email'];
     emailVerifiedAt   = json['email_verified_at'];

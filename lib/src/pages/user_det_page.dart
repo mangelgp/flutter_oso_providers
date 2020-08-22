@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:providers_oso/src/bloc/user_bloc.dart';
-import 'package:providers_oso/src/models/user.dart';
-import 'package:providers_oso/src/providers/providers.dart';
+import 'package:providers_oso/src/models/user_model.dart';
+import 'package:providers_oso/src/providers/users_providers.dart';
 
 class UserDetPage extends StatefulWidget {
   @override
@@ -10,8 +9,7 @@ class UserDetPage extends StatefulWidget {
 
 class _UserDetPageState extends State<UserDetPage> {
 
-  final comService = ComunicationService();
-  final usersBloc = UsersBloc();
+  final usersProviders = UsersProviders();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -27,7 +25,7 @@ class _UserDetPageState extends State<UserDetPage> {
         title: Text('Detalle de usuario'),
       ),
       body: FutureBuilder(
-        future: comService.getUserById(user.idUser.toString()),
+        future: usersProviders.getUserById(user.id.toString()),
         builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
           if (snapshot.hasData) {
             return buildBody(snapshot.data, context);
@@ -128,7 +126,7 @@ class _UserDetPageState extends State<UserDetPage> {
               if (exit == null) return;
 
               if (exit) {
-                var response = await comService.deleteUserById(user.idUser.toString());
+                var response = await usersProviders.deleteUserById(user.id.toString());
                 if (response != null) {
                 Navigator.pop(context);    
                 } else {
@@ -157,9 +155,7 @@ class _UserDetPageState extends State<UserDetPage> {
   _navigateToUpdate(User user) async {
     final result = await Navigator.pushNamed(context, 'update_user', arguments: user);
     if(result == true) {
-      setState(() {
-        
-      });
+      setState(() {});
     }
   }
 
