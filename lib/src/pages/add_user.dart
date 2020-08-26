@@ -12,15 +12,25 @@ class _NewUserPageState extends State<NewUserPage> {
 
   final usersProviders = new UsersProviders();
 
-  TextEditingController _controllerName = TextEditingController();
-  TextEditingController _controllerEmail = TextEditingController();
-  TextEditingController _controllerPass = TextEditingController();
-  TextEditingController _controllerPassConfirm = TextEditingController();
+  IconData _visiblePass = Icons.visibility;
+  IconData _visiblePassConfirm = Icons.visibility;
+  bool _hintPass = true;
+  bool _hintPassConfirm = true;
+  bool _isLoading = false;
 
-  String _name                 = '';
-  String _email                = '';
-  String _password             = '';
-  String _passwordConfirmation = '';
+  final _controllerName        = TextEditingController();
+  final _controllerEmail       = TextEditingController();
+  final _controllerPass        = TextEditingController();
+  final _controllerPassConfirm = TextEditingController();
+
+  @override
+  void dispose() { 
+    _controllerName.dispose();
+    _controllerEmail.dispose();
+    _controllerPass.dispose();
+    _controllerPassConfirm.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,119 +40,153 @@ class _NewUserPageState extends State<NewUserPage> {
         title: Text('Registro de usuario'),
       ),
       body: ListView(
+        padding: const EdgeInsets.all(20.0),
         children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                TextField(
-                  controller: _controllerName,
-                  autofocus: true,
-                  keyboardType: TextInputType.name,
-                  textCapitalization: TextCapitalization.words,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0)
-                    ),
-                    hintText: 'Introduzca su nombre completo',
-                    labelText: 'Nombre',
-                  ),
-                  onChanged: (valor) {
-                    setState(() {
-                      _name = valor;
-                      print(_name);
-                    });
-                  },
-                ),
-
-                SizedBox(height: 25.0,),
-
-                TextField(
-                  controller: _controllerEmail,
-                  keyboardType: TextInputType.emailAddress,
-                  textCapitalization: TextCapitalization.none,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0)
-                    ),
-                    hintText: 'Introduzca su direccion de correo',
-                    labelText: 'Correo',
-                  ),
-                  onChanged: (valor) {
-                    setState(() {
-                      _email = valor;
-                      print(_email);
-                    });
-                  },
-                ),
-
-                SizedBox(height: 25.0,),
-
-                TextField(
-                  controller: _controllerPass,
-                  obscureText: true,
-                  textCapitalization: TextCapitalization.none,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0)
-                    ),
-                    hintText: 'Introduzca su clave',
-                    labelText: 'Clave',
-                  ),
-                  onChanged: (valor) {
-                    setState(() {
-                      _password = valor;
-                      print(_password);
-                    });
-                  },
-                ),
-
-                SizedBox(height: 25.0,),
-
-                TextField(
-                  controller: _controllerPassConfirm,
-                  obscureText: true,
-                  textCapitalization: TextCapitalization.none,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0)
-                    ),
-                    hintText: 'Confirme su clave',
-                    labelText: 'Confirmacion',
-                  ),
-                  onChanged: (valor) {
-                    setState(() {
-                      _passwordConfirmation = valor;
-                      print(_passwordConfirmation);
-                    });
-                  },
-                ),
-
-                SizedBox(height: 40.0,),
-
-                RaisedButton(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                  color: Theme.of(context).primaryColor,
-                  child: Text('Agregar', style: TextStyle(color: Colors.white),),
-                  onPressed: () {
-                    _addNewUser(context);
-                  }
-                ),
-              ],
-            ),
-          )
+          _campoNombre(),
+          SizedBox(height: 25.0,),
+          _campoEmail(),
+          SizedBox(height: 25.0,),
+          _campoClave(),
+          SizedBox(height: 25.0,),
+          _campoClaveConfirm(),
+          SizedBox(height: 40.0,),
+          _addUserButton(context),
         ],
       ),
     );
   }
 
+  TextField _campoNombre() {
+    return TextField(
+      controller: _controllerName,
+      autofocus: true,
+      keyboardType: TextInputType.name,
+      textCapitalization: TextCapitalization.words,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20.0)
+        ),
+        hintText: 'Introduzca su nombre completo',
+        labelText: 'Nombre',
+      ),
+      onChanged: (valor) {
+        setState(() {
+          print(_controllerName.text);
+        });
+      },
+    );
+  }
+
+  TextField _campoEmail() {
+    return TextField(
+      controller: _controllerEmail,
+      keyboardType: TextInputType.emailAddress,
+      textCapitalization: TextCapitalization.none,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20.0)
+        ),
+        hintText: 'Introduzca su direccion de correo',
+        labelText: 'Correo',
+      ),
+      onChanged: (valor) {
+        setState(() {
+          print(_controllerEmail.text);
+        });
+      },
+    );
+  }
+
+  TextField _campoClave() {
+    return TextField(
+      controller: _controllerPass,
+      obscureText: _hintPass,
+      textCapitalization: TextCapitalization.none,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20.0)
+        ),
+        hintText: 'Introduzca su clave',
+        labelText: 'Clave',
+        suffixIcon: IconButton(
+          icon: Icon(_visiblePass),
+          onPressed: () {
+            if ( _hintPass == true ) {
+              _hintPass = false;
+              _visiblePass = Icons.visibility_off;
+              setState(() {});
+            } else {
+              _hintPass = true;
+              _visiblePass = Icons.visibility;
+              setState(() {});
+            }
+          }
+        ),
+      ),
+      onChanged: (valor) {
+        setState(() {
+          print(_controllerPass.text);
+        });
+      },
+    );
+  }
+
+  TextField _campoClaveConfirm() {
+    return TextField(
+      controller: _controllerPassConfirm,
+      obscureText: _hintPassConfirm,
+      textCapitalization: TextCapitalization.none,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20.0)
+        ),
+        hintText: 'Confirme su clave',
+        labelText: 'Confirmacion',
+        suffixIcon: IconButton(
+          icon: Icon(_visiblePassConfirm),
+          onPressed: () {
+            if ( _hintPassConfirm == true ) {
+              _hintPassConfirm = false;
+              _visiblePassConfirm = Icons.visibility_off;
+              setState(() {});
+            } else {
+              _hintPassConfirm = true;
+              _visiblePassConfirm = Icons.visibility;
+              setState(() {});
+            }
+          }
+        ),
+      ),
+      onChanged: (valor) {
+        setState(() {
+          print(_controllerPassConfirm.text);
+        });
+      },
+    );
+  }
+
+  RaisedButton _addUserButton(BuildContext context) {
+    return RaisedButton(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      color: Theme.of(context).primaryColor,
+      child: Text('Agregar', style: TextStyle(color: Colors.white),),
+      onPressed: (!_isLoading) ? () {
+        _addNewUser(context);
+      } : null
+    );
+  }
+
   void _addNewUser(BuildContext context) async {
 
+    setState(() {
+      _isLoading = true;
+    });
+
     var response = await usersProviders.addNewUser(
-      nombre           : _name,
-      correo           : _email,
-      clave            : _password,
-      claveConfirmation: _passwordConfirmation
+      nombre           : _controllerName.text,
+      correo           : _controllerEmail.text,
+      clave            : _controllerPass.text,
+      claveConfirmation: _controllerPassConfirm.text
     );
 
     if (response is User) {
@@ -190,5 +234,8 @@ class _NewUserPageState extends State<NewUserPage> {
         barrierDismissible: true,
       );
     }
+    setState(() {
+      _isLoading = false;
+    });
   }
 }

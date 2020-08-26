@@ -54,6 +54,7 @@ class _AllUsersPageState extends State<AllUsersPage> {
       leading: Icon(Icons.person),
       onTap: () {
         _navigateToUserDet(context, user);
+        // Navigator.pushNamed(context, 'user_det', arguments: user);
       },
     );
   }

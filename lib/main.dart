@@ -3,7 +3,7 @@ import 'package:providers_oso/src/pages/add_user.dart';
 import 'package:providers_oso/src/pages/all_users.dart';
 import 'package:providers_oso/src/pages/find_user.dart';
 import 'package:providers_oso/src/pages/home_page.dart';
-import 'package:providers_oso/src/pages/update_user.dart';
+import 'package:providers_oso/src/pages/update_user_page.dart';
 import 'package:providers_oso/src/pages/user_det_page.dart';
  
 void main() => runApp(MyApp());

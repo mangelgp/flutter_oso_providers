@@ -13,6 +13,11 @@ class _UserDetPageState extends State<UserDetPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void dispose() { 
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     final User user = ModalRoute.of(context).settings.arguments;
