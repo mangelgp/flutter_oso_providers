@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:providers_oso/src/bloc/users_bloc.dart';
 import 'package:providers_oso/src/models/error_user_model.dart';
 import 'package:providers_oso/src/models/user_model.dart';
 import 'package:providers_oso/src/providers/users_providers.dart';
@@ -12,6 +13,7 @@ class UpdateUserPage extends StatefulWidget {
 class _UpdateUserPageState extends State<UpdateUserPage> {
 
   final comService = UsersProviders();
+  final usersBloc = new UsersBloc();
 
   final _nameController = TextEditingController();
   final _emailController =TextEditingController();
@@ -121,7 +123,10 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
           content: Text("Datos actualizados exitosamente!", textAlign: TextAlign.center,)
         ),
         barrierDismissible: true,
-      ).then((value) => Navigator.pop(context, true));
+      ).then((value) {
+        Navigator.pop(context, true);
+        usersBloc.getAllUsers();
+      });
 
     } else if (updatedUser is ErrorUser){
       showDialog(
