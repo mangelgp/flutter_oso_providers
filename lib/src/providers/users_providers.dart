@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:providers_oso/src/models/error_user_model.dart';
 import 'package:providers_oso/src/models/list_users_model.dart';
@@ -12,6 +13,23 @@ class UsersProviders {
   static Map<String, String> headers = {
     'Content-Type': 'application/x-www-form-urlencoded'
   };
+
+  Future<dynamic> login({@required String email, @required String password}) async {
+    
+    final url = Uri.http(authority, 'api/login');
+    final resp = await http.post(url, headers: UsersProviders.headers);
+    final decodedData = json.decode(resp.body);
+
+    try {
+
+      final user = new User.fromJson(decodedData['data']);
+      print(decodedData['data']);
+      return user;
+
+    } catch (_) {
+      return null;
+    }
+  }
 
   Future<List<User>> getAllUsers() async {
 
